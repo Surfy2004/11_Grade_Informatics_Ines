@@ -1,0 +1,34 @@
+def encrypt(text, shift):
+  encrypted_t = ""
+  for c in text:
+      if ord(c) >=32 and ord(c) <= 126:
+          encrypted_c = chr((ord(c) + shift - 32) % 95 + 32)
+          encrypted_t += encrypted_c
+  return encrypted_t
+
+def decrypt(text, shift):
+  decrypt_t = ""
+  for c in text:
+          decrypt_c = chr((ord(c) - shift - 32) % 95 + 32)
+          decrypt_t += decrypt_c
+  return decrypt_t
+
+choose = int(input("Enter 1 for encryption, 2 for decryption or 3 for brute force decryption: "))
+while not choose in range(1, 4):
+   choose = int(input("Enter 1 for encryption, 2 for decryption or 3 for brute force decryption: "))
+
+shift = -1
+if choose != 3:
+   shift = int(input("Enter shift value between 0 and 25: "))
+   while not shift in range(0, 26):
+       shift = int(input("Enter shift value between 0 and 25: "))
+
+text = input("Enter text: ")
+text = text.lower()
+if choose == 1:
+   print(encrypt(text, shift))
+elif choose == 2:
+   print(decrypt(text, shift))
+else:
+   for potential_shift in range(0, 26):
+       print(decrypt(text, potential_shift))
