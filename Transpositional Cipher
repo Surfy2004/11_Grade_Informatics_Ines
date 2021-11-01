@@ -1,0 +1,73 @@
+using System;
+using System.Net.Http;
+class Program
+{
+    static string Encryption(string randomtext, int key)
+    {
+        string encryption = "";
+        for (int c = 0; c < key; c++)
+        {
+            for (int j = c; randomtext.Length > j; j = j + key)
+            {
+                encryption += randomtext[j];
+            }
+        }
+        return encryption;
+    }
+    static string Decryption2(string randomtext, int key)
+    {
+        string decrypted = "";
+        int bucketsize = (randomtext.Length - 1) / key + 1;
+        int large_buckets = randomtext.Length % key;
+        if (large_buckets == 0)
+        {
+            large_buckets = key;
+        }
+        for (int start = 0; start<bucketsize; start++)
+        {
+            int curr = start;
+            int curr_bucket = 0;
+            while (curr < randomtext.Length && decrypted.Length < randomtext.Length)
+            {
+                decrypted += randomtext[curr];
+                if (curr_bucket < large_buckets)
+                {
+                    curr += bucketsize;
+                }
+                else
+                {
+                    curr += bucketsize - 1;
+                }
+                curr_bucket++;
+            }
+        }
+        return decrypted;
+    }
+    static void Main(string[] args)
+    {
+        Random rndo = new Random();
+        int testcase = rndo.Next(4, 5);
+        for (int i = 0; i <= testcase; i++)
+        {
+            HttpClient client = new HttpClient();
+            string randomtext = client.GetStringAsync("http://metaphorpsum.com/sentences/10").Result;
+            Random rnd = new Random();
+            int key = rnd.Next(Convert.ToInt32(randomtext.Length * 0.2), Convert.ToInt32(randomtext.Length * 0.5));
+            string encrypted = Encryption(randomtext, key);
+            Console.WriteLine("\r\n");
+            Console.WriteLine("This is the encryption: \r\n"); Console.WriteLine(encrypted);
+            Console.WriteLine("\r\n");
+            string decrypted = Decryption2(encrypted, key);
+            Console.WriteLine("This is the decryption: \r\n"); Console.WriteLine(decrypted);
+            Console.WriteLine("\r\n");
+            if (randomtext == decrypted)
+            {
+                Console.WriteLine("The decryption is correct!");
+            }
+            else
+            {
+                Console.WriteLine("The decryption is incorrect!");
+            }
+        }
+    }
+}
