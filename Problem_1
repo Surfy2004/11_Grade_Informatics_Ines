@@ -1,0 +1,13 @@
+array1 = [[1,2],[3,4]]
+array2 = [[1,2],[3,4]]
+array4 = [[],[]]
+m = 0
+j = 0
+for l in range(0, len(array1)):
+   for i in range(0, len(array1)):
+       answer = (array1[l][j]*array2[j][i]) + (array1[l][j+1]*array2[j+1][i])
+       if l == 1 or l == 2:
+           array4[1].append(answer)
+       else:
+           array4[0].append(answer)
+print(array4)
