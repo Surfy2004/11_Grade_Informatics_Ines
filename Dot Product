@@ -1,0 +1,21 @@
+a = [[1, 2, 3], [1, 2, 3], [1, 2, 3]]
+b = [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]
+
+rows = len(a)
+columns = len(b[0])
+product = []
+
+for i in range(rows):
+    product.append([])
+    for j in range(columns):
+        product[i].append([])
+
+for m in range(len(a)):
+    for n in range(len(b[0])):
+        for h in range(len(b)):
+            product[m][n].append(a[m][h] * b[h][n])
+
+for p in range(len(product)-1):
+    product.pop(p)
+
+print(product)
