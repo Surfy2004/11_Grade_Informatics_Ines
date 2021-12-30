@@ -1,0 +1,42 @@
+import math
+
+def encrypt(text, key_a, key_b):
+  encrypted_t = ""
+  for c in text:
+      encrypted_c = ord(c) - ord("a")
+      encrypted_c = encrypted_c*key_a
+      encrypted_c = encrypted_c + key_b
+      encrypted_c = encrypted_c % 26
+      encrypted_t += chr(encrypted_c+ord("a"))
+  return encrypted_t
+
+def decrypt(text, key_a, key_b):
+    decrypted_t = ""
+    for c in text:
+        decrypted_c = ord(c) - ord("a")
+        decrypted_c = decrypted_c - key_b
+        while decrypted_c % key_a != 0:
+            decrypted_c += 26
+        decrypted_c = decrypted_c // key_a
+        decrypted_c = decrypted_c + ord("a")
+        decrypted_t += chr(decrypted_c)
+    return decrypted_t
+
+text = input("Enter text: ")
+text = text.lower()
+key = int(input("Enter key: "))
+key_a, key_b = divmod(key, len(text))
+while math.gcd(key_a, 26) != 1:
+    print("Key " + str(key_a) + " is not coprime with 26, please enter another key")
+    key = int(input())
+
+
+choose = int(input("Enter 1 for encryption, 2 for decryption: "))
+while not choose in range(1, 3):
+   choose = int(input("Enter 1 for encryption, 2 for decryption: "))
+
+
+if choose == 1:
+    print(encrypt(text, key_a, key_b))
+elif choose == 2:
+    print(decrypt(text, key_a, key_b))
