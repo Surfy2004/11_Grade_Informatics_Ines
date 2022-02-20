@@ -1,0 +1,23 @@
+import random
+
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+            'v', 'w', 'x', 'y', 'z']
+
+message = "In my role as Wikileaks editor, I've been involved in fighting off many legal attacks. To do that, and keep our sources safe, we have had to spread assets, encrypt everything, and move telecommunications and people around the world to activate protective laws in different national jurisdictions. -- Julian Assange, editor-in-chief of Wikileaks"
+
+
+def encryptMessage(key, message):
+    message = list(message)
+
+
+# def decryptMessage(key, message):
+
+# def translateMessage(key, message, mode):
+
+def GenerateRandomKey(alphabet):
+    random.shuffle(alphabet)
+    key = alphabet
+    return key
+
+
+print(GenerateRandomKey(alphabet))
