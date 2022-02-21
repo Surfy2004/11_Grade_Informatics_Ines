@@ -1,23 +1,36 @@
 import random
 
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-            'v', 'w', 'x', 'y', 'z']
-
-message = "In my role as Wikileaks editor, I've been involved in fighting off many legal attacks. To do that, and keep our sources safe, we have had to spread assets, encrypt everything, and move telecommunications and people around the world to activate protective laws in different national jurisdictions. -- Julian Assange, editor-in-chief of Wikileaks"
-
-
-def encryptMessage(key, message):
-    message = list(message)
-
-
-# def decryptMessage(key, message):
-
-# def translateMessage(key, message, mode):
-
-def GenerateRandomKey(alphabet):
-    random.shuffle(alphabet)
-    key = alphabet
+def GenerateRandomKey(key):
+    random.shuffle(key)
     return key
 
+def encryptMessage(alphabet, key, message):
+    return translateMessage(alphabet, key, message, "encrypt")
 
-print(GenerateRandomKey(alphabet))
+def decryptMessage(alphabet, key, message):
+    return translateMessage(alphabet, key, message, "decrypt")
+
+def translateMessage(alphabet, key, message, mode):
+    message = list(message)
+    for i in range(len(message)):
+        if message[i] == " ":
+            continue
+        for j in range(len(alphabet)):
+            if mode == "encrypt":
+                if message[i].lower() == alphabet[j]:
+                    message[i] = key[j]
+                    break
+            elif mode == "decrypt":
+                if message[i].lower() == key[j]:
+                    message[i] = alphabet[j]
+                    break
+    message = ''.join([str(item) for item in message])
+    return message
+
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u','v', 'w', 'x', 'y', 'z', '.', ',', '-']
+key = GenerateRandomKey(list(alphabet))
+message = "In my role as Wikileaks editor, I've been involved in fighting off many legal attacks. To do that, and keep our sources safe, we have had to spread assets, encrypt everything, and move telecommunications and people around the world to activate protective laws in different national jurisdictions. -- Julian Assange, editor-in-chief of Wikileaks"
+encrypted_message = encryptMessage(alphabet, key, message)
+print(encrypted_message)
+decrypted_message = decryptMessage(alphabet, key, encrypted_message)
+print(decrypted_message)
