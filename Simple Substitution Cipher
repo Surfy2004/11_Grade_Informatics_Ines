@@ -1,4 +1,6 @@
 import random
+from typing import Dict, List
+
 
 def GenerateRandomKey(key):
     random.shuffle(key)
@@ -27,6 +29,53 @@ def translateMessage(alphabet, key, message, mode):
     message = ''.join([str(item) for item in message])
     return message
 
+def get_pattern(word: str) -> str:
+  """ Compute the pattern of a given word.
+
+  For example HELLO -> 01223
+
+  :param word: THe word for which to compute the pattern.
+  :return: The pattern
+  """
+  final_pattern = ""
+  seen_chars = {}  # dict of character -> number
+  curr_idx = 0
+  for ch in word:
+      if ch not in seen_chars:
+          seen_chars[ch] = str(curr_idx)
+          curr_idx += 1
+      final_pattern += seen_chars[ch]
+  return final_pattern
+
+def load_dict() -> List[str]:
+    """ Load the words from a dictionary file.
+
+    :return: The list of loaded words.
+    """
+    f = open("dictionary.txt", "r")
+    words = []
+    for line in f:
+        words.append(line)
+    return words
+
+def get_pattern_dict() -> Dict[str, List[str]]:
+    words = load_dict()
+    dict = {}
+    for word in words:
+      pattern = get_pattern(word[:-1])
+      if pattern not in dict:
+          dict[pattern] = [] # add an empty list
+      dict[pattern].append(word[:-1]) # add to the list of words that map to this pattern
+    return dict
+
+def brute_force(encrypted: str):
+    pattern_dict = get_pattern_dict()
+    encrypted_pattern = get_pattern(encrypted)
+    if encrypted_pattern not in pattern_dict:
+        print("Cannot match pattern.")
+    candidate_words = pattern_dict[encrypted_pattern]
+    print(candidate_words)
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u','v', 'w', 'x', 'y', 'z', '.', ',', '-']
 key = GenerateRandomKey(list(alphabet))
 message = "In my role as Wikileaks editor, I've been involved in fighting off many legal attacks. To do that, and keep our sources safe, we have had to spread assets, encrypt everything, and move telecommunications and people around the world to activate protective laws in different national jurisdictions. -- Julian Assange, editor-in-chief of Wikileaks"
@@ -34,3 +83,4 @@ encrypted_message = encryptMessage(alphabet, key, message)
 print(encrypted_message)
 decrypted_message = decryptMessage(alphabet, key, encrypted_message)
 print(decrypted_message)
+brute_force(encryptMessage(alphabet, key, "role"))
